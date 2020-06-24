@@ -1,6 +1,8 @@
 tests: test-stack.out test-queue.out list.o btree.o
 #### libs ####
-stack.o: stack.c stack.h
+slcell.o: slcell.h slcell.c
+	gcc -c -o slcell.o slcell.c
+stack.o: stack.c stack.h slcell.o
 	gcc -c -o stack.o stack.c
 queue.o: queue.c queue.h
 	gcc -c -o queue.o queue.c
@@ -11,7 +13,7 @@ btree.o: btree.c btree.h
 
 #### tests ####	
 test-stack.out: stack.o test-stack.c
-	gcc -o test-stack.out test-stack.c stack.o
+	gcc -o test-stack.out test-stack.c stack.o slcell.o
 test-queue.out: queue.o test-queue.c
 	gcc -o test-queue.out test-queue.c queue.o
 

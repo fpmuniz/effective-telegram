@@ -1,36 +1,18 @@
 #pragma once
 
-typedef struct Stack Stack;
-typedef struct Item Item;
-typedef int KeyType;
+#include "slcell.h"
 
-struct Item {
-	Item* next;
-	KeyType key;
-	/* --- Other fields --- */
-};
+typedef struct Stack Stack;
 
 struct Stack {
 	Item* top;
 	int size;
 };
 
-// Initializes an Item with default values
-void init_item(Item*);
-
-// Allocates memory for an Item and initializes it
-Item* new_item();
-
-// Prints Item to stdout
-void print_item(const Item*);
-
-// Frees memory dynamically allocated to an item
-void delete_item(Item*);
-
 // Initializes a stack with default values
 void init_stack(Stack*);
 
-// Allocates memory for a stack
+// Allocates memory for a stack and initializes its values
 Stack* new_stack();
 
 // Inserts a COPY of an item into a stack
