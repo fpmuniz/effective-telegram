@@ -11,3 +11,5 @@ btree.o:
 	gcc -c -o btree.o btree.c
 clean:
 	rm -f *.o *.out
+check:
+	valgrind ./test-stack.out
