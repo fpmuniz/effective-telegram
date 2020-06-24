@@ -1,18 +1,17 @@
 #pragma once
 
-typedef struct StackStr Stack;
-typedef struct ItemStr Item;
-typedef struct ItemStr* ItemPtr;
+typedef struct Stack Stack;
+typedef struct Item Item;
 typedef int KeyType;
 
-struct ItemStr {
-	ItemPtr next;
+struct Item {
+	Item* next;
 	KeyType key;
 	/* --- Other fields --- */
 };
 
-struct StackStr {
-	ItemPtr top;
+struct Stack {
+	Item* top;
 	int size;
 };
 
