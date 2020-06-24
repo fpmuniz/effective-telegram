@@ -2,86 +2,92 @@
 #include <stdio.h>
 #include "btree.h"
 
-BTree* new_tree() {
-	BTree *tree = (BTree*) malloc(sizeof(BTree));
-	tree->left = NULL;
-	tree->right = NULL;
-	tree->parent = NULL;
+Tree* new_tree() {
+	Tree* tree;
+	tree = (Tree*) malloc(sizeof(Tree));
+	init_tree(tree);
 	return tree;
 }
 
-BTree* root(BTree* tree) {
-	while (tree->parent != NULL)
-		tree = tree->parent;
-	return tree;
+void init_tree(Tree* tree) {
+	tree->root = NULL;
 }
 
-BTree* search(BTree* tree, KeyType key) {
-	tree = root(tree);
-	while (tree != NULL && key != tree->item.key) {
-		if (key < tree->item.key)
-			tree = tree->left;
+Item* root(Item* item) {
+	while (item->parent != NULL)
+		item = item->parent;
+	return item;
+}
+
+Item* search(Item* item, KeyType key) {
+	while (item != NULL && key != item->key) {
+		if (key < item->key)
+			item = item->left;
 		else
-			tree = tree->right;
+			item = item->right;
 	}
-	return tree;
+	return item;
 }
 
-BTree* min(BTree* tree) {
-	while (tree->left != NULL) {
-		tree = tree->left;
+Item* min(Item* item) {
+	if (item == NULL) return NULL;
+	while (item->left != NULL) {
+		item = item->left;
 	}
-	return tree;
+	return item;
 }
 
-BTree* max(BTree* tree) {
-	while (tree->right != NULL) {
-		tree = tree->right;
+Item* max(Item* item) {
+	while (item->right != NULL) {
+		item = item->right;
 	}
-	return tree;
+	return item;
 }
 
-BTree* successor(BTree* tree) {
-	BTree* parent;
-	if (tree->right != NULL) 
-		return min(tree->right);
-	parent = tree->parent;
-	while (parent != NULL && tree == parent->right) {
-		tree = parent;
-		parent = tree->parent;
-	}
-	return parent;
-}
-
-BTree* predecessor(BTree* tree) {
-	BTree* parent;
-	if (tree->left != NULL) 
-		return max(tree->left);
-	parent = tree->parent;
-	while (parent != NULL && tree == parent->left) {
-		tree = parent;
-		parent = tree->parent;
+Item* successor(Item* item) {
+	Item* parent;
+	if (item->right != NULL) 
+		return min(item->right);
+	parent = item->parent;
+	while (parent != NULL && item == parent->right) {
+		item = parent;
+		parent = item->parent;
 	}
 	return parent;
 }
 
-BTree* insert(BTree* tree, Item item) {
-	BTree *y = NULL, *x = root(tree);
+Item* predecessor(Item* item) {
+	Item* parent;
+	if (item->left != NULL) 
+		return max(item->left);
+	parent = item->parent;
+	while (parent != NULL && item == parent->left) {
+		item = parent;
+		parent = item->parent;
+	}
+	return parent;
+}
+
+Item* insert(Tree* tree, const Item* item) {
+	Item *y = NULL, *x = tree->root;
 	while (x != NULL) {
 		y = x;
-		if (item.key < x->item.key)
+		if (item->key < x->key)
 			x = x->left;
-		x = x->right;
+		else
+			x = x->right;
 	}
 	if (y == NULL) {
-		tree->item = item;	// tree was empty
-		return tree;
+		x = new_item();
+		*x = *item;
+		tree->root = x;	// tree was empty
+		return x;
 	}
 
-	x = new_tree();
+	x = new_item();
 	x->parent = y;
-	x->item = item;
-	if (item.key < y->item.key) {
+	*x = *item;
+	if (item->key < y->key) {
 		y->left = x;
 	} else {
 		y-> right = x;
@@ -89,30 +95,39 @@ BTree* insert(BTree* tree, Item item) {
 	return x;
 }
 
-void delete_tree(BTree* tree) {
-	if (tree->left) delete_tree(tree->left);
-	if (tree->right) delete_tree(tree->right);
+void recursive_delete(Item* item) {
+	if (item == NULL) return;
+	recursive_delete(item->left);
+	recursive_delete(item->right);
+	free(item);
+}
+
+void wipe_tree(Tree* tree) {
+	recursive_delete(tree->root);
+}
+
+void delete_tree(Tree* tree) {
+	wipe_tree(tree);
 	free(tree);
 }
 
-void print_inorder(BTree* tree) {
-	if (tree == NULL) return;
-	print_inorder(tree->left);
-	printf("%d\n", tree->item.key);
-	print_inorder(tree->right);
+void print_inorder(const Item* item) {
+	if (item == NULL) return;
+	print_inorder(item->left);
+	print_item(item);
+	print_inorder(item->right);
 }
 
-// int main() {
-// 	BTree *tree, *aux;
-// 	Item item;
-// 	tree = new_tree();
-// 	item.key = 10;
-// 	aux = insert(tree, item);
-// 	item.key = 11;
-// 	aux = insert(tree, item);
-// 	item.key = 12;
-// 	aux = insert(tree, item);
-// 	print_inorder(root(tree));
-// 	delete_tree(tree);
-// 	return 0;
-// }
+void print_preorder(const Item* item) {
+	if (item == NULL) return;
+	print_item(item);
+	print_preorder(item->left);
+	print_preorder(item->right);	
+}
+
+void print_postorder(const Item* item) {
+	if (item == NULL) return;
+	print_postorder(item->left);
+	print_postorder(item->right);	
+	print_item(item);
+}
