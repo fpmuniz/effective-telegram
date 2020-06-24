@@ -2,58 +2,73 @@
 #include <stdlib.h>
 #include "list.h"
 
-void new_list(List *list) {
-	list->head = (NodePtr) malloc(sizeof(Node));
+List* new_list() {
+	List *list = (List*) malloc(sizeof(List));
+	list->head = new_item();
+	init_list(list);
+	return list;
+}
+
+void init_list(List* list) {
 	list->head->next = list->head;
 	list->head->prev = list->head;
 	list->size = 0;
 }
 
-Node* search(const List *list, KeyType key) {
-	Node *aux = list->head->next;
+Item* search(const List *list, KeyType key) {
+	Item *aux = list->head->next;
 	while (aux != list->head) {
-		if (aux->item.key == key)
+		if (aux->key == key)
 			return aux;
 		aux = aux->next;
 	}
 	return NULL;
 }
 
-Node* insert(List* list, Node* node, Item item) {
-	Node *new_node = (Node*) malloc(sizeof(Node));
-	new_node->prev = node;
-	new_node->next = node->next;
-	new_node->item = item;
-	node->next->prev = node;
-	node->next = new_node;
-	list->size++;
-	return new_node;
-}
-
-Node* append(List* list, Item item) {
+void append(List* list, const Item *item) {
 	// insertion at the end
-	Node *new_node = (Node*) malloc(sizeof(Node));
-	new_node->next = list->head;
-	new_node->prev = list->head->prev;
-	list->head->prev->next = new_node;
-	list->head->prev = new_node;
-	new_node->item = item;
+	Item *new = new_item();
+	*new = *item;
+	new->next = list->head;
+	new->prev = list->head->prev;
+	list->head->prev->next = new;
+	list->head->prev = new;
 	list->size++;
-	return new_node;
 }
 
-void delete(List* list, Node* node) {
-	node->prev->next = node->next;
-	node->next->prev = node->prev;
-	free(node);
+void insert(List* list, Item* previous, const Item* to_insert) {
+	Item *new = new_item();
+	*new = *to_insert;
+	new->prev = previous;
+	new->next = previous->next;
+	previous->next->prev = new;
+	previous->next = new;
+	list->size++;
+}
+
+void delete(List* list, Item* item) {
+	item->prev->next = item->next;
+	item->next->prev = item->prev;
+	delete_item(item);
 	list->size--;
 }
 
-void delete_list(List* list) {
-	Node* aux = NULL;
+void wipe_list(List* list) {
 	while (list->size > 0) {
-		aux = list->head->next;
-		delete(list, aux);
+		delete(list, list->head->next);
 	}
-	free(list->head);
+}
+
+void delete_list(List* list) {
+	wipe_list(list);
+	delete_item(list->head);
+	free(list);
+}
+
+void print_list(const List* list) {
+	Item *aux = list->head->next;
+	while (aux != list->head) {
+		print_item(aux);
+		aux = aux->next;
+	}
 }

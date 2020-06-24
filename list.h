@@ -1,32 +1,28 @@
 #pragma once
 
-typedef struct NodeStr* NodePtr;
-typedef struct NodeStr Node;
-typedef struct ListStr List;
-typedef struct ItemStr Item;
-typedef int KeyType;
+#include "dlcell.h"
 
-struct ItemStr {
-	KeyType key;
-	/* --- Other fields --- */
-};
+typedef struct List List;
 
-struct NodeStr {
-	NodePtr next, prev;
-	Item item;
-};
-
-struct ListStr {
-	NodePtr head;
+struct List {
+	Item *head;
 	int size;
 };
 
-void new_list(List*);
+void init_list(List*);
 
-Node* search(const List*, KeyType);
+List* new_list();
 
-Node* insert(List*, Node*, Item);
+void append(List*, const Item*);
 
-void delete(List*, Node*);
+void insert(List*, Item*, const Item*);
+
+void delete(List*, Item*);
+
+Item* search(const List*, KeyType);
+
+void wipe_list(List*);
 
 void delete_list(List*);
+
+void print_list(const List*);

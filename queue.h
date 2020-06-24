@@ -1,27 +1,12 @@
 #pragma once
+#include "slcell.h"
 
 typedef struct Queue Queue;
-typedef struct Item Item;
-typedef int KeyType;
-
-struct Item {
-	Item *next;
-	KeyType key;
-	/* --- Other fields --- */
-};
 
 struct Queue {
 	Item *first, *last;
 	int size;
 };
-
-void init_item(Item*);
-
-Item* new_item();
-
-void print_item(const Item*);
-
-void delete_item(Item*);
 
 void init_queue(Queue*);
 
