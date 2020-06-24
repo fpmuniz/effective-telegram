@@ -4,14 +4,16 @@ slcell.o: slcell.h slcell.c
 	gcc -c -o slcell.o slcell.c
 dlcell.o: dlcell.h dlcell.c
 	gcc -c -o dlcell.o dlcell.c
-stack.o: stack.c stack.h slcell.o
+bnode.o: bnode.h bnode.c
+	gcc -c -o bnode.o bnode.c
+stack.o: stack.c stack.h
 	gcc -c -o stack.o stack.c
 queue.o: queue.c queue.h
 	gcc -c -o queue.o queue.c
 list.o: list.c list.h
 	gcc -c -o list.o list.c
 btree.o: btree.c btree.h
-	gcc -c -o btree.o btree.c
+	gcc -c -g -o btree.o btree.c
 
 #### tests ####	
 test-stack.out: stack.o test-stack.c slcell.o
