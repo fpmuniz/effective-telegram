@@ -2,11 +2,11 @@ tests: test-stack.out test-queue.out list.o btree.o
 #### libs ####
 stack.o: stack.c stack.h
 	gcc -c -o stack.o stack.c
-queue.o:
+queue.o: queue.c queue.h
 	gcc -c -o queue.o queue.c
-list.o:
+list.o: list.c list.h
 	gcc -c -o list.o list.c
-btree.o:
+btree.o: btree.c btree.h
 	gcc -c -o btree.o btree.c
 
 #### tests ####	
