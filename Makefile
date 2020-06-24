@@ -17,7 +17,7 @@ test-queue.out: queue.o test-queue.c
 
 #### misc ####
 clean:
-	rm -f *.o *.out
+	rm -f *.o *.out vgcore.*
 check:
 	valgrind ./test-stack.out
 	valgrind ./test-queue.out
