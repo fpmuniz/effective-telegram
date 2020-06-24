@@ -1,32 +1,40 @@
 #pragma once
 
-typedef struct NodeStr* NodePtr;
-typedef struct NodeStr Node;
-typedef struct ListStr List;
-typedef struct ItemStr Item;
+typedef struct Item Item;
+typedef struct List List;
 typedef int KeyType;
 
-struct ItemStr {
+struct Item {
+	Item *next, *prev;
 	KeyType key;
 	/* --- Other fields --- */
 };
 
-struct NodeStr {
-	NodePtr next, prev;
-	Item item;
-};
-
-struct ListStr {
-	NodePtr head;
+struct List {
+	Item *head;
 	int size;
 };
 
-void new_list(List*);
+void init_item(Item* item);
 
-Node* search(const List*, KeyType);
+Item* new_item();
 
-Node* insert(List*, Node*, Item);
+void print_item(const Item *item);
 
-void delete(List*, Node*);
+void init_list(List*);
+
+List* new_list();
+
+void append(List*, const Item*);
+
+void insert(List*, Item*, const Item*);
+
+void delete(List*, Item*);
+
+Item* search(const List*, KeyType);
+
+void wipe_list(List*);
 
 void delete_list(List*);
+
+void print_list(const List*);
