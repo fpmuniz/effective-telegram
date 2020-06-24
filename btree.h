@@ -1,35 +1,40 @@
 #pragma once
 
-typedef struct NodeStr BTree;
-typedef struct ItemStr Item;
-typedef int KeyType;
+#include "bnode.h"
 
-struct ItemStr {
-	KeyType key;
-	/* --- Other fields --- */
+
+typedef struct Tree Tree;
+
+struct Tree {
+	Item* root;
 };
 
-struct NodeStr {
-	BTree *left, *right, *parent;
-	Item item;
-};
+Tree* new_tree();
 
-BTree* new_tree();
+void init_tree(Tree*);
 
-BTree* search(BTree*, KeyType);
+Item* root(Item*);
 
-BTree* min(BTree*);
+Item* search(Item*, KeyType);
 
-BTree* max(BTree*);
+Item* min(Item*);
 
-BTree* predecessor(BTree*);
+Item* max(Item*);
 
-BTree* successor(BTree*);
+Item* predecessor(Item*);
 
-BTree* root(BTree*);
+Item* successor(Item*);
 
-BTree* insert(BTree*, Item);
+Item* insert(Tree*, const Item*);
 
-void delete(BTree*, BTree*);
+void delete(Tree*, Tree*);
 
-void delete_tree(BTree*);
+void print_inorder(const Item*);
+
+void print_preorder(const Item*);
+
+void print_postorder(const Item*);
+
+void wipe_tree(Tree*);
+
+void delete_tree(Tree*);
