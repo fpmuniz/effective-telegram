@@ -2,23 +2,6 @@
 #include <stdlib.h>
 #include "list.h"
 
-void init_item(Item* item) {
-	item->next = NULL;
-	item->prev = NULL;
-	item->key = 0;
-}
-
-Item* new_item() {
-	Item *item;
-	item = (Item*) malloc(sizeof(Item));
-	init_item(item);
-	return item;
-}
-
-void print_item(const Item *item) {
-	printf("%d\n", item->key);
-}
-
 List* new_list() {
 	List *list = (List*) malloc(sizeof(List));
 	list->head = new_item();
@@ -66,21 +49,19 @@ void insert(List* list, Item* previous, const Item* to_insert) {
 void delete(List* list, Item* item) {
 	item->prev->next = item->next;
 	item->next->prev = item->prev;
-	free(item);
+	delete_item(item);
 	list->size--;
 }
 
 void wipe_list(List* list) {
-	Item* aux;
 	while (list->size > 0) {
-		aux = list->head->next;
-		delete(list, aux);
+		delete(list, list->head->next);
 	}
 }
 
 void delete_list(List* list) {
 	wipe_list(list);
-	free(list->head);
+	delete_item(list->head);
 	free(list);
 }
 

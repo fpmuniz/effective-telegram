@@ -1,25 +1,13 @@
 #pragma once
 
-typedef struct Item Item;
-typedef struct List List;
-typedef int KeyType;
+#include "dlcell.h"
 
-struct Item {
-	Item *next, *prev;
-	KeyType key;
-	/* --- Other fields --- */
-};
+typedef struct List List;
 
 struct List {
 	Item *head;
 	int size;
 };
-
-void init_item(Item* item);
-
-Item* new_item();
-
-void print_item(const Item *item);
 
 void init_list(List*);
 
