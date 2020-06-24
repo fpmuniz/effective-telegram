@@ -2,43 +2,80 @@
 #include <stdio.h>
 #include "queue.h"
 
-void new_queue(Queue* queue) {
+void init_item(Item* item) {
+	item->next = NULL;
+	item->key = 0;
+}
+
+Item* new_item() {
+	Item *item;
+	item = (Item*) malloc(sizeof(Item));
+	init_item(item);
+	return item;
+}
+
+void print_item(const Item* item) {
+	printf("%d\n", item->key);
+}
+
+void delete_item(Item* item) {
+	free(item);
+}
+
+void init_queue(Queue* queue) {
 	queue->first = NULL;
 	queue->last = queue->first;
 	queue->size = 0;
 }
 
-void enqueue(Queue* queue, Item item) {
-	NodePtr new_node;
-	new_node = (NodePtr) malloc(sizeof(Node));
-	new_node->item = item;
-	new_node->next = NULL;
-	if (queue->size == 0) {
-		queue->first = new_node;
-		queue->last = new_node;
-	} else {
-		queue->last-> next = new_node;
-		queue->last = new_node;
-	}
+Queue* new_queue() {
+	Queue *queue;
+	queue = (Queue*) malloc(sizeof(Queue));
+	init_queue(queue);
+	return queue;
+}
+
+void enqueue(Queue* queue, const Item* item) {
+	Item *new;
+	new = new_item();
+	*new = *item;
+	new->next = NULL;
+	if (queue->size == 0)
+		queue->first = new;
+	else
+		queue->last->next = new;
+	queue->last = new;
 	queue->size++;
 }
 
 int dequeue(Queue* queue, Item* item) {
 	if (queue->size < 1) return 0;	// underflow
 
-	NodePtr deleted_node;
-	deleted_node = queue->first;
-	queue->first = deleted_node->next;
-	*item = deleted_node->item;
-	free(deleted_node);
+	Item* del;
+	del = queue->first;
+	queue->first = del->next;
+	if (item != NULL) *item = *del;
+	free(del);
 	queue->size--;
 	return 1;
 }
 
-void delete_queue(Queue* queue) {
-	Item aux;
+void wipe_queue(Queue* queue) {
 	int removed;
 	do {
-		removed = dequeue(queue, &aux);
+		removed = dequeue(queue, NULL);
 	} while (removed);
+}
+
+void delete_queue(Queue* queue) {
+	wipe_queue(queue);
+	free(queue);
+}
+
+void print_queue(const Queue* queue) {
+	Item *item = queue->first;
+	while (item != NULL) {
+		print_item(item);
+		item = item->next;
+	}
 }

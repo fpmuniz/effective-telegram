@@ -1,31 +1,38 @@
 #pragma once
 
-typedef struct NodeStr* NodePtr;
-typedef struct NodeStr Node;
-typedef struct QueueStr Queue;
-typedef struct ItemStr Item;
+typedef struct Queue Queue;
+typedef struct Item Item;
 typedef int KeyType;
 
-struct ItemStr {
+struct Item {
+	Item *next;
 	KeyType key;
 	/* --- Other fields --- */
 };
 
-struct NodeStr {
-	NodePtr next;
-	Item item;
-};
-
-struct QueueStr {
-	NodePtr first;
-	NodePtr last;
+struct Queue {
+	Item *first, *last;
 	int size;
 };
 
-void new_queue(Queue*);
+void init_item(Item*);
 
-void enqueue(Queue*, Item);
+Item* new_item();
+
+void print_item(const Item*);
+
+void delete_item(Item*);
+
+void init_queue(Queue*);
+
+Queue* new_queue();
+
+void enqueue(Queue*, const Item*);
 
 int dequeue(Queue*, Item*);
 
+void wipe_queue(Queue*);
+
 void delete_queue(Queue*);
+
+void print_queue(const Queue*);
