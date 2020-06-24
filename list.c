@@ -55,9 +55,9 @@ void append(List* list, const Item *item) {
 
 void insert(List* list, Item* previous, const Item* to_insert) {
 	Item *new = new_item();
+	*new = *to_insert;
 	new->prev = previous;
 	new->next = previous->next;
-	*new = *to_insert;
 	previous->next->prev = new;
 	previous->next = new;
 	list->size++;

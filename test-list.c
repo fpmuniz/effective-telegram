@@ -47,9 +47,25 @@ void test_list_size() {
 	delete_list(list);
 }
 
+void test_list_search_insert_and_delete()  {
+	List *list = new_list();
+	Item item, *aux;
+	for (int i = 0; i < 10; i++) {
+		item.key = i;
+		append(list, &item);
+	}
+	aux = search(list, 4);
+	assert(aux->key == 4);
+	item.key = 42;
+	insert(list, aux, &item);
+	delete(list, aux);
+	delete_list(list);
+}
+
 int main() {
 	test_create_new_list();
 	test_append_and_delete();
 	test_print_list();
 	test_list_size();
+	test_list_search_insert_and_delete();
 }
