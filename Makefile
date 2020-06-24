@@ -14,7 +14,7 @@ queue.o: queue.c queue.h
 list.o: list.c list.h
 	gcc -c -o list.o list.c
 btree.o: btree.c btree.h
-	gcc -c -g -o btree.o btree.c
+	gcc -c -o btree.o btree.c
 
 #### tests ####	
 test-stack.out: stack.o test-stack.c slcell.o
@@ -24,7 +24,7 @@ test-queue.out: queue.o test-queue.c slcell.o
 test-list.out: list.o test-list.c dlcell.o
 	gcc -o test-list.out test-list.c list.o dlcell.o
 test-btree.out: btree.o test-btree.c bnode.o
-	gcc -g -o test-btree.out test-btree.c btree.o bnode.o
+	gcc -o test-btree.out test-btree.c btree.o bnode.o
 
 #### misc ####
 clean:
