@@ -15,7 +15,7 @@ btree.o: btree.c btree.h
 test-stack.out: stack.o test-stack.c
 	gcc -o test-stack.out test-stack.c stack.o slcell.o
 test-queue.out: queue.o test-queue.c
-	gcc -o test-queue.out test-queue.c queue.o
+	gcc -o test-queue.out test-queue.c queue.o slcell.o
 
 #### misc ####
 clean:
