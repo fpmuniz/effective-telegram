@@ -34,4 +34,4 @@ check:
 	valgrind ./test-queue.out
 	valgrind ./test-list.out
 	valgrind ./test-btree.out
-	./test-btree.out | diff - test-btree.txt
+	./test-btree.out | diff test-btree.txt -
