@@ -83,6 +83,19 @@ void test_print() {
 	print_inorder(tree->root);
 	print_preorder(tree->root);
 	print_postorder(tree->root);
+	delete_tree(tree);
+}
+
+void test_delete() {
+	Tree *tree = create_base_tree();
+	Item *aux = search(tree->root, 20);	// 1 children
+	assert(aux->parent->key == 15);
+	delete(tree, aux);
+	aux = search(tree->root, 5);
+	assert(aux->parent->key == 10);
+	delete(tree, aux);
+	print_inorder(tree->root);
+	delete_tree(tree);
 }
 
 int main() {
@@ -94,4 +107,5 @@ int main() {
 	test_max();
 	test_min();
 	test_print();
+	test_delete();
 }
