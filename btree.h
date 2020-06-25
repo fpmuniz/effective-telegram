@@ -27,7 +27,7 @@ Item* successor(Item*);
 
 Item* insert(Tree*, const Item*);
 
-void delete(Tree*, Tree*);
+void delete(Tree*, Item*);
 
 void print_inorder(const Item*);
 

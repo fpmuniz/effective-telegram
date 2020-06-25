@@ -69,30 +69,63 @@ Item* predecessor(Item* item) {
 }
 
 Item* insert(Tree* tree, const Item* item) {
-	Item *y = NULL, *x = tree->root;
-	while (x != NULL) {
-		y = x;
-		if (item->key < x->key)
-			x = x->left;
+	Item *parent = NULL, *new = tree->root;
+	while (new != NULL) {
+		parent = new;
+		if (item->key < new->key)
+			new = new->left;
 		else
-			x = x->right;
+			new = new->right;
 	}
-	if (y == NULL) {
-		x = new_item();
-		*x = *item;
-		tree->root = x;	// tree was empty
-		return x;
+	new = new_item();
+	if (parent == NULL) {
+		*new = *item;
+		tree->root = new;	// tree was empty
+		return new;
 	}
 
-	x = new_item();
-	x->parent = y;
-	*x = *item;
-	if (item->key < y->key) {
-		y->left = x;
+	*new = *item;
+	new->parent = parent;
+	if (item->key < parent->key) {
+		parent->left = new;
 	} else {
-		y-> right = x;
+		parent-> right = new;
 	}
-	return x;
+	return new;
+}
+
+void transplant(Tree* tree, Item* old, Item* new) {
+	if (old->parent == NULL) {
+		tree->root = new;
+	}
+	else if (old == old->parent->left) {
+		old->parent->left = new;
+	} else {
+		old->parent->right = new;
+	}
+	if (new) new->parent = old->parent;
+}
+
+void delete(Tree* tree, Item* old) {
+	Item *new;
+	if (old->left == NULL) {
+		transplant(tree, old, old->right);
+	}
+	else if (old->right == NULL) {
+		transplant(tree, old, old->left);
+	}
+	else {
+		new = successor(old);
+		if (new->parent != old) {
+			transplant(tree, new, new->right);
+			new->right = old->right;
+			new->right->parent = new;
+		}
+		transplant(tree, old, new);
+		new->left = old->left;
+		new->left->parent = new;
+	}
+	delete_item(old);
 }
 
 void recursive_delete(Item* item) {
